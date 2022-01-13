@@ -36,7 +36,11 @@ from libs.ardmediathek_api import ARDMediathekAPI
 
 # -- Constants ----------------------------------------------
 ADDON_ID = 'plugin.video.hartaberfair'
-BASEURL = 'https://api.ardmediathek.de/page-gateway/widgets/daserste/asset/Y3JpZDovL3dkci5kZS9oYXJ0IGFiZXIgZmFpcg?pageNumber=0&pageSize=48&embedded=true&seasoned=false&seasonNumber=&withAudiodescription=false&withOriginalWithSubtitle=false&withOriginalversion=false'
+BASEURL = 'https://api.ardmediathek.de/page-gateway/widgets/daserste/asset/Y3JpZDovL3dkci5kZS9oYXJ0IGFiZXIgZmFpcg?pageNumber=%s&pageSize=%s&embedded=true&seasoned=false&seasonNumber=&withAudiodescription=false&withOriginalWithSubtitle=false&withOriginalversion=false'
+PAGESIZE = 48
+
+ADDONTHUMB = xbmcvfs.translatePath('special://home/addons/' + ADDON_ID + '/resources/assets/icon.png')
+FANART = xbmcvfs.translatePath('special://home/addons/' + ADDON_ID + '/resources/assets/fanart.jpg')
 
 
 # -- Settings -----------------------------------------------
@@ -45,7 +49,7 @@ xbmcplugin.setContent(int(sys.argv[1]), 'movies')
 
 
 def setHomeView(url, tag=None):
-    API = ARDMediathekAPI(url)
+    API = ARDMediathekAPI(url, tag)
     teasers = API.getTeaser()
 
 
@@ -68,9 +72,16 @@ def buildArgs(method, url=None, tag=None):
 
 def hartaberfair():
 
+    xbmcplugin.setPluginFanart(int(sys.argv[1]), FANART)
+
     args = get_query_args(sys.argv[2])
     if args is None or args.__len__() == 0:
-        args = buildArgs('home', BASEURL)
+        tag = {
+            'pageNumber': 0,
+            'pageSize': PAGESIZE
+        }
+
+        args = buildArgs('home', BASEURL, tag)
 
     method = args.get('method')
     url = args.get('url')

@@ -26,7 +26,13 @@ def _getContent(url):
 
 class ARDMediathekAPI:
 
-    def __init__(self, url):
+    def __init__(self, url, tag):
+
+        if tag is not None:
+            pageNumber = tag.get('pageNumber')
+            pageSize = tag.get('pageSize')
+            url = url % (pageNumber, pageSize)
+
         self._content = _getContent(url)
 
     def getTeaser(self):
