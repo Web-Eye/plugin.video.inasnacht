@@ -32,8 +32,11 @@ except ImportError:
     import libs.emu.xbmcaddon as xbmcaddon
     import libs.emu.xbmcvfs as xbmcvfs
 
+from libs.ardmediathek_api import ARDMediathekAPI
+
 # -- Constants ----------------------------------------------
 ADDON_ID = 'plugin.video.hartaberfair'
+BASEURL = 'https://api.ardmediathek.de/page-gateway/widgets/daserste/asset/Y3JpZDovL3dkci5kZS9oYXJ0IGFiZXIgZmFpcg?pageNumber=0&pageSize=48&embedded=true&seasoned=false&seasonNumber=&withAudiodescription=false&withOriginalWithSubtitle=false&withOriginalversion=false'
 
 
 # -- Settings -----------------------------------------------
@@ -42,7 +45,9 @@ xbmcplugin.setContent(int(sys.argv[1]), 'movies')
 
 
 def setHomeView(url, tag=None):
-    pass
+    API = ARDMediathekAPI(url)
+    teasers = API.getTeaser()
+
 
 
 def get_query_args(s_args):
@@ -65,7 +70,7 @@ def hartaberfair():
 
     args = get_query_args(sys.argv[2])
     if args is None or args.__len__() == 0:
-        args = buildArgs('home')
+        args = buildArgs('home', BASEURL)
 
     method = args.get('method')
     url = args.get('url')
