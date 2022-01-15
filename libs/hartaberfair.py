@@ -18,12 +18,12 @@ import json
 import sys
 import urllib
 import urllib.parse
-from datetime import datetime
 
 from libs.ardmediathek_api import ARDMediathekAPI
 from libs.kodion.gui_manager import GuiManager
 from libs.kodion.utils import utils as kodionUtils
 from libs.utils import utils
+from libs.translations import translations
 
 # -- Constants ----------------------------------------------
 ADDON_ID = 'plugin.video.hartaberfair'
@@ -40,6 +40,7 @@ guiManager.setContent('movies')
 
 # -- Settings -----------------------------------------------
 addon = kodionUtils.getAddon(ADDON_ID)
+_t = translations(addon)
 
 
 def setHomeView(url, tag=None):
@@ -50,10 +51,16 @@ def setHomeView(url, tag=None):
     if teasers is not None:
         for teaser in teasers:
             title = teaser['title']
-            duration = utils.getDuration(int(teaser['duration']))
+            duration, unit = utils.getDuration(int(teaser['duration']))
+            duration = {
+                'hours': duration + f' {_t.getString(_t.HOURS)}',
+                'minutes': duration + f' {_t.getString(_t.MINUTES)}',
+                'seconds': duration + f' {_t.getString(_t.SECONDS)}',
+            }[unit]
+
             broadcastedOn = utils.getDateTime(teaser['broadcastedOn'], '%Y-%m-%dT%H:%M:%SZ').strftime('%d.%m.%Y, %H:%M:%S')
             availableTo = utils.getDateTime(teaser['availableTo'], '%Y-%m-%dT%H:%M:%SZ').strftime('%d.%m.%Y, %H:%M:%S')
-            plot = f'[B]{title}[/B]\n\n[B]Duration[/B]: {duration}\n[B]Broadcasted on[/B]: {broadcastedOn}\n[B]Available To[/B]: {availableTo}'
+            plot = f'[B]{title}[/B]\n\n[B]{_t.getString(_t.DURATION)}[/B]: {duration}\n[B]{_t.getString(_t.BROADCASTEDON)}[/B]: {broadcastedOn}\n[B]{_t.getString(_t.AVAILABLETO)}[/B]: {availableTo}'
 
             guiManager.addDirectory(title, teaser['poster'], plot, buildArgs('list', teaser['url']))
 

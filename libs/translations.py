@@ -15,24 +15,25 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import time
-from datetime import datetime
+class translations:
 
+    DURATION = 'duration'
+    BROADCASTEDON = 'broadcastedon'
+    AVAILABLETO = 'availableto'
+    HOURS = 'hours'
+    MINUTES = 'minutes'
+    SECONDS = 'seconds'
 
-class utils:
+    def __init__(self, addon):
+        self._language = addon.getLocalizedString
 
-    @staticmethod
-    def getDuration(seconds):
-        m, s = divmod(seconds, 60)
-        h, m = divmod(m, 60)
+    def getString(self, name):
 
-        if h > 0:
-            return f'{h:d}:{m:02d}:{s:02d}', 'hours'
-        elif m > 0:
-            return f'{m:02d}:{s:02d}', 'minutes'
-        else:
-            return f'{s:02d}', 'seconds'
-
-    @staticmethod
-    def getDateTime(strDateTime, strFormat):
-        return datetime(*(time.strptime(strDateTime, strFormat)[0:6]))
+        return {
+            self.DURATION:          self._language(30100),
+            self.BROADCASTEDON:     self._language(30101),
+            self.AVAILABLETO:       self._language(30102),
+            self.HOURS:             self._language(30103),
+            self.MINUTES:           self._language(30104),
+            self.SECONDS:           self._language(30105)
+        }[name]
