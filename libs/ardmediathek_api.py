@@ -28,12 +28,38 @@ class ARDMediathekAPI:
 
     def __init__(self, url, tag):
 
+        self._posterWidth = 480
+
         if tag is not None:
             pageNumber = tag.get('pageNumber')
             pageSize = tag.get('pageSize')
-            url = url % (pageNumber, pageSize)
+            url = url.replace('{pageNumber}', str(pageNumber))
+            url = url.replace('{pageSize}', str(pageSize))
+            self._posterWidth = tag.get('posterWidth')
 
         self._content = _getContent(url)
 
+    def _hasContent(self):
+        return self._content is not None
+
+    def getPagination(self):
+        if self._hasContent():
+            return self._content['pagination']
+
     def getTeaser(self):
-        pass
+        try:
+            teasers = []
+            if self._hasContent():
+                for teaser in self._content['teasers']:
+                    image = teaser['images']['aspect16x9']['src'].replace('{width}', str(self._posterWidth))
+                    teasers.append({'availableTo': teaser['availableTo'],
+                                    'broadcastedOn': teaser['broadcastedOn'],
+                                    'duration': teaser['duration'],
+                                    'poster': image,
+                                    'title': teaser['longTitle'],
+                                    'url': teaser['links']['target']['href']})
+
+                return teasers
+        finally:
+            pass
+

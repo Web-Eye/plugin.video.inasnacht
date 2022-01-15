@@ -14,48 +14,59 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-
+import json
 import sys
 import urllib
 import urllib.parse
 
-try:
-    import xbmc
-    import xbmcplugin
-    import xbmcgui
-    import xbmcaddon
-    import xbmcvfs
-except ImportError:
-    import libs.emu.xbmc as xbmc
-    import libs.emu.xbmcplugin as xbmcplugin
-    import libs.emu.xbmcgui as xbmcgui
-    import libs.emu.xbmcaddon as xbmcaddon
-    import libs.emu.xbmcvfs as xbmcvfs
-
 from libs.ardmediathek_api import ARDMediathekAPI
+from libs.kodion.gui_manager import GuiManager
+from libs.kodion.utils import *
 
 # -- Constants ----------------------------------------------
 ADDON_ID = 'plugin.video.hartaberfair'
-BASEURL = 'https://api.ardmediathek.de/page-gateway/widgets/daserste/asset/Y3JpZDovL3dkci5kZS9oYXJ0IGFiZXIgZmFpcg?pageNumber=%s&pageSize=%s&embedded=true&seasoned=false&seasonNumber=&withAudiodescription=false&withOriginalWithSubtitle=false&withOriginalversion=false'
-PAGESIZE = 48
+BASEURL = 'https://api.ardmediathek.de/page-gateway/widgets/daserste/asset/Y3JpZDovL3dkci5kZS9oYXJ0IGFiZXIgZmFpcg?pageNumber={pageNumber}&pageSize={pageSize}&embedded=true&seasoned=false&seasonNumber=&withAudiodescription=false&withOriginalWithSubtitle=false&withOriginalversion=false'
+PAGESIZE = 30
+POSTERWIDTH = 480
 
-ADDONTHUMB = xbmcvfs.translatePath('special://home/addons/' + ADDON_ID + '/resources/assets/icon.png')
-FANART = xbmcvfs.translatePath('special://home/addons/' + ADDON_ID + '/resources/assets/fanart.jpg')
+# ADDONTHUMB = utils.translatePath('special://home/addons/' + ADDON_ID + '/resources/assets/icon.png')
+FANART = utils.translatePath('special://home/addons/' + ADDON_ID + '/resources/assets/fanart.jpg')
+DEFAULT_IMAGE_URL = ''
 
+guiManager = GuiManager(sys.argv[1], ADDON_ID, DEFAULT_IMAGE_URL, FANART)
+guiManager.setContent('movies')
 
 # -- Settings -----------------------------------------------
-addon = xbmcaddon.Addon(id=ADDON_ID)
-xbmcplugin.setContent(int(sys.argv[1]), 'movies')
+addon = utils.getAddon(ADDON_ID)
 
 
 def setHomeView(url, tag=None):
     API = ARDMediathekAPI(url, tag)
+    pagination = API.getPagination()
     teasers = API.getTeaser()
 
+    if teasers is not None:
+        for teaser in teasers:
+            guiManager.addDirectory(teaser['title'], teaser['poster'], None, buildArgs('list', teaser['url']))
+
+        if pagination is not None:
+            pageNumber = int(pagination['pageNumber'])
+            pageSize = int(pagination['pageSize'])
+            totalElements = int(pagination['totalElements'])
+
+            if totalElements > ((pageNumber + 1) * pageSize):
+                strPageNumber = str(pageNumber + 2)
+                tag = {
+                    'pageNumber': pageNumber + 1,
+                    'pageSize': PAGESIZE,
+                    'posterWidth': POSTERWIDTH
+                }
+                guiManager.addDirectory(f'Page {strPageNumber}', None, None, buildArgs('home', BASEURL, json.dumps(tag)))
 
 
 def get_query_args(s_args):
     args = urllib.parse.parse_qs(urllib.parse.urlparse(s_args).query)
+    print(args)
 
     for key in args:
         args[key] = args[key][0]
@@ -72,13 +83,12 @@ def buildArgs(method, url=None, tag=None):
 
 def hartaberfair():
 
-    xbmcplugin.setPluginFanart(int(sys.argv[1]), FANART)
-
     args = get_query_args(sys.argv[2])
     if args is None or args.__len__() == 0:
         tag = {
             'pageNumber': 0,
-            'pageSize': PAGESIZE
+            'pageSize': PAGESIZE,
+            'posterWidth': POSTERWIDTH
         }
 
         args = buildArgs('home', BASEURL, tag)
@@ -87,8 +97,11 @@ def hartaberfair():
     url = args.get('url')
     tag = args.get('tag')
 
+    if tag is not None and isinstance(tag, str):
+        tag = json.loads(tag)
+
     {
         'home': setHomeView
     }[method](url, tag)
 
-    xbmcplugin.endOfDirectory(int(sys.argv[1]))
+    guiManager.endOfDirectory()
