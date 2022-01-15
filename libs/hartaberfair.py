@@ -18,10 +18,12 @@ import json
 import sys
 import urllib
 import urllib.parse
+from datetime import datetime
 
 from libs.ardmediathek_api import ARDMediathekAPI
 from libs.kodion.gui_manager import GuiManager
-from libs.kodion.utils import *
+from libs.kodion.utils import utils as kodionUtils
+from libs.utils import utils
 
 # -- Constants ----------------------------------------------
 ADDON_ID = 'plugin.video.hartaberfair'
@@ -30,14 +32,14 @@ PAGESIZE = 30
 POSTERWIDTH = 480
 
 # ADDONTHUMB = utils.translatePath('special://home/addons/' + ADDON_ID + '/resources/assets/icon.png')
-FANART = utils.translatePath('special://home/addons/' + ADDON_ID + '/resources/assets/fanart.jpg')
+FANART = kodionUtils.translatePath('special://home/addons/' + ADDON_ID + '/resources/assets/fanart.jpg')
 DEFAULT_IMAGE_URL = ''
 
 guiManager = GuiManager(sys.argv[1], ADDON_ID, DEFAULT_IMAGE_URL, FANART)
 guiManager.setContent('movies')
 
 # -- Settings -----------------------------------------------
-addon = utils.getAddon(ADDON_ID)
+addon = kodionUtils.getAddon(ADDON_ID)
 
 
 def setHomeView(url, tag=None):
@@ -47,7 +49,13 @@ def setHomeView(url, tag=None):
 
     if teasers is not None:
         for teaser in teasers:
-            guiManager.addDirectory(teaser['title'], teaser['poster'], None, buildArgs('list', teaser['url']))
+            title = teaser['title']
+            duration = utils.getDuration(int(teaser['duration']))
+            broadcastedOn = utils.getDateTime(teaser['broadcastedOn'], '%Y-%m-%dT%H:%M:%SZ').strftime('%d.%m.%Y, %H:%M:%S')
+            availableTo = utils.getDateTime(teaser['availableTo'], '%Y-%m-%dT%H:%M:%SZ').strftime('%d.%m.%Y, %H:%M:%S')
+            plot = f'[B]{title}[/B]\n\n[B]Duration[/B]: {duration}\n[B]Broadcasted on[/B]: {broadcastedOn}\n[B]Available To[/B]: {availableTo}'
+
+            guiManager.addDirectory(title, teaser['poster'], plot, buildArgs('list', teaser['url']))
 
         if pagination is not None:
             pageNumber = int(pagination['pageNumber'])
