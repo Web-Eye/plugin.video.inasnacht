@@ -32,12 +32,16 @@ class HardAberFair:
 
         # -- Constants ----------------------------------------------
         self._ADDON_ID = 'plugin.video.hartaberfair'
-        self._BASEURL = 'https://api.ardmediathek.de/page-gateway/widgets/daserste/asset/Y3JpZDovL3dkci5kZS9oYXJ0IGFiZXIgZmFpcg?pageNumber={pageNumber}&pageSize={pageSize}&embedded=true&seasoned=false&seasonNumber=&withAudiodescription=false&withOriginalWithSubtitle=false&withOriginalversion=false'
+        self._BASEURL = 'https://api.ardmediathek.de/page-gateway/widgets/daserste/asset' \
+                        '/Y3JpZDovL3dkci5kZS9oYXJ0IGFiZXIgZmFpcg?pageNumber={pageNumber}&pageSize={' \
+                        'pageSize}&embedded=true&seasoned=false&seasonNumber=&withAudiodescription=false' \
+                        '&withOriginalWithSubtitle=false&withOriginalversion=false '
         self._PAGESIZE = 30
         self._POSTERWIDTH = 480
 
         # ADDONTHUMB = utils.translatePath('special://home/addons/' + ADDON_ID + '/resources/assets/icon.png')
-        self._FANART = kodionUtils.translatePath('special://home/addons/' + self._ADDON_ID + '/resources/assets/fanart.jpg')
+        self._FANART = kodionUtils.translatePath('special://home/addons/' + self._ADDON_ID + '/resources/assets'
+                                                                                             '/fanart.jpg')
         self._DEFAULT_IMAGE_URL = ''
 
         self._guiManager = GuiManager(sys.argv[1], self._ADDON_ID, self._DEFAULT_IMAGE_URL, self._FANART)
@@ -66,9 +70,11 @@ class HardAberFair:
                     'seconds': duration + f' {self._t.getString(SECONDS)}',
                 }[unit]
 
-                broadcastedOn = utils.getDateTime(teaser['broadcastedOn'], '%Y-%m-%dT%H:%M:%SZ').strftime('%d.%m.%Y, %H:%M:%S')
-                availableTo = utils.getDateTime(teaser['availableTo'], '%Y-%m-%dT%H:%M:%SZ').strftime('%d.%m.%Y, %H:%M:%S')
-                plot = f'[B]{title}[/B]\n\n[B]{self._t.getString(DURATION)}[/B]: {duration}\n[B]{self._t.getString(BROADCASTEDON)}[/B]: {broadcastedOn}\n[B]{self._t.getString(AVAILABLETO)}[/B]: {availableTo}'
+                broadcastedOn = utils.getDateTime(teaser['broadcastedOn'], '%Y-%m-%dT%H:%M:%SZ').strftime('%d.%m.%Y, '
+                                                                                                          '%H:%M:%S')
+                availableTo = utils.getDateTime(teaser['availableTo'], '%Y-%m-%dT%H:%M:%SZ').strftime('%d.%m.%Y, '
+                                                                                                      '%H:%M:%S')
+                plot = f'[B]{title}[/B]\n\n[B]{self._t.getString(DURATION)}[/B]: {duration}\n[B]{self._t.getString(BROADCASTEDON)}[/B]: {broadcastedOn}\n[B]{self._t.getString(AVAILABLETO)}[/B]: {availableTo} '
 
                 self._guiManager.addDirectory(title, teaser['poster'], plot, self.buildArgs('item', teaser['url']))
 
