@@ -25,98 +25,105 @@ from libs.kodion.utils import utils as kodionUtils
 from libs.utils import utils
 from libs.translations import translations
 
-# -- Constants ----------------------------------------------
-ADDON_ID = 'plugin.video.hartaberfair'
-BASEURL = 'https://api.ardmediathek.de/page-gateway/widgets/daserste/asset/Y3JpZDovL3dkci5kZS9oYXJ0IGFiZXIgZmFpcg?pageNumber={pageNumber}&pageSize={pageSize}&embedded=true&seasoned=false&seasonNumber=&withAudiodescription=false&withOriginalWithSubtitle=false&withOriginalversion=false'
-PAGESIZE = 30
-POSTERWIDTH = 480
 
-# ADDONTHUMB = utils.translatePath('special://home/addons/' + ADDON_ID + '/resources/assets/icon.png')
-FANART = kodionUtils.translatePath('special://home/addons/' + ADDON_ID + '/resources/assets/fanart.jpg')
-DEFAULT_IMAGE_URL = ''
+class HardAberFair:
 
-guiManager = GuiManager(sys.argv[1], ADDON_ID, DEFAULT_IMAGE_URL, FANART)
-guiManager.setContent('movies')
+    def __init__(self):
 
-# -- Settings -----------------------------------------------
-addon = kodionUtils.getAddon(ADDON_ID)
-_t = translations(addon)
+        # -- Constants ----------------------------------------------
+        self._ADDON_ID = 'plugin.video.hartaberfair'
+        self._BASEURL = 'https://api.ardmediathek.de/page-gateway/widgets/daserste/asset/Y3JpZDovL3dkci5kZS9oYXJ0IGFiZXIgZmFpcg?pageNumber={pageNumber}&pageSize={pageSize}&embedded=true&seasoned=false&seasonNumber=&withAudiodescription=false&withOriginalWithSubtitle=false&withOriginalversion=false'
+        self._PAGESIZE = 30
+        self._POSTERWIDTH = 480
 
+        # ADDONTHUMB = utils.translatePath('special://home/addons/' + ADDON_ID + '/resources/assets/icon.png')
+        self._FANART = kodionUtils.translatePath('special://home/addons/' + self._ADDON_ID + '/resources/assets/fanart.jpg')
+        self._DEFAULT_IMAGE_URL = ''
 
-def setHomeView(url, tag=None):
-    API = ARDMediathekAPI(url, tag)
-    pagination = API.getPagination()
-    teasers = API.getTeaser()
+        self._guiManager = GuiManager(sys.argv[1], self._ADDON_ID, self._DEFAULT_IMAGE_URL, self._FANART)
+        self._guiManager.setContent('movies')
 
-    if teasers is not None:
-        for teaser in teasers:
-            title = teaser['title']
-            duration, unit = utils.getDuration(int(teaser['duration']))
-            duration = {
-                'hours': duration + f' {_t.getString(_t.HOURS)}',
-                'minutes': duration + f' {_t.getString(_t.MINUTES)}',
-                'seconds': duration + f' {_t.getString(_t.SECONDS)}',
-            }[unit]
+        # -- Settings -----------------------------------------------
+        addon = kodionUtils.getAddon(self._ADDON_ID)
+        self._t = translations(addon)
 
-            broadcastedOn = utils.getDateTime(teaser['broadcastedOn'], '%Y-%m-%dT%H:%M:%SZ').strftime('%d.%m.%Y, %H:%M:%S')
-            availableTo = utils.getDateTime(teaser['availableTo'], '%Y-%m-%dT%H:%M:%SZ').strftime('%d.%m.%Y, %H:%M:%S')
-            plot = f'[B]{title}[/B]\n\n[B]{_t.getString(_t.DURATION)}[/B]: {duration}\n[B]{_t.getString(_t.BROADCASTEDON)}[/B]: {broadcastedOn}\n[B]{_t.getString(_t.AVAILABLETO)}[/B]: {availableTo}'
+    def setItemView(self, url, tag=None):
+        API = ARDMediathekAPI(url, tag)
+        pass
 
-            guiManager.addDirectory(title, teaser['poster'], plot, buildArgs('list', teaser['url']))
+    def setHomeView(self, url, tag=None):
+        API = ARDMediathekAPI(url, tag)
+        pagination = API.getPagination()
+        teasers = API.getTeaser()
 
-        if pagination is not None:
-            pageNumber = int(pagination['pageNumber'])
-            pageSize = int(pagination['pageSize'])
-            totalElements = int(pagination['totalElements'])
+        if teasers is not None:
+            for teaser in teasers:
+                title = teaser['title']
+                duration, unit = utils.getDuration(int(teaser['duration']))
+                duration = {
+                    'hours': duration + f' {self._t.getString(self._t.HOURS)}',
+                    'minutes': duration + f' {self._t.getString(self._t.MINUTES)}',
+                    'seconds': duration + f' {self._t.getString(self._t.SECONDS)}',
+                }[unit]
 
-            if totalElements > ((pageNumber + 1) * pageSize):
-                strPageNumber = str(pageNumber + 2)
-                tag = {
-                    'pageNumber': pageNumber + 1,
-                    'pageSize': PAGESIZE,
-                    'posterWidth': POSTERWIDTH
-                }
-                guiManager.addDirectory(f'Page {strPageNumber}', None, None, buildArgs('home', BASEURL, json.dumps(tag)))
+                broadcastedOn = utils.getDateTime(teaser['broadcastedOn'], '%Y-%m-%dT%H:%M:%SZ').strftime('%d.%m.%Y, %H:%M:%S')
+                availableTo = utils.getDateTime(teaser['availableTo'], '%Y-%m-%dT%H:%M:%SZ').strftime('%d.%m.%Y, %H:%M:%S')
+                plot = f'[B]{title}[/B]\n\n[B]{self._t.getString(self._t.DURATION)}[/B]: {duration}\n[B]{self._t.getString(self._t.BROADCASTEDON)}[/B]: {broadcastedOn}\n[B]{self._t.getString(self._t.AVAILABLETO)}[/B]: {availableTo}'
 
+                self._guiManager.addDirectory(title, teaser['poster'], plot, self.buildArgs('item', teaser['url']))
 
-def get_query_args(s_args):
-    args = urllib.parse.parse_qs(urllib.parse.urlparse(s_args).query)
-    print(args)
+            if pagination is not None:
+                pageNumber = int(pagination['pageNumber'])
+                pageSize = int(pagination['pageSize'])
+                totalElements = int(pagination['totalElements'])
 
-    for key in args:
-        args[key] = args[key][0]
-    return args
+                if totalElements > ((pageNumber + 1) * pageSize):
+                    strPageNumber = str(pageNumber + 2)
+                    tag = {
+                        'pageNumber': pageNumber + 1,
+                        'pageSize': self._PAGESIZE,
+                        'posterWidth': self._POSTERWIDTH
+                    }
+                    self._guiManager.addDirectory(f'Page {strPageNumber}', None, None, self.buildArgs('home', self._BASEURL, json.dumps(tag)))
 
+    @staticmethod
+    def get_query_args(s_args):
+        args = urllib.parse.parse_qs(urllib.parse.urlparse(s_args).query)
 
-def buildArgs(method, url=None, tag=None):
-    return {
-        'method': method,
-        'url': url,
-        'tag': tag
-    }
+        for key in args:
+            args[key] = args[key][0]
+        return args
 
-
-def hartaberfair():
-
-    args = get_query_args(sys.argv[2])
-    if args is None or args.__len__() == 0:
-        tag = {
-            'pageNumber': 0,
-            'pageSize': PAGESIZE,
-            'posterWidth': POSTERWIDTH
+    @staticmethod
+    def buildArgs(method, url=None, tag=None):
+        return {
+            'method': method,
+            'url': url,
+            'tag': tag
         }
 
-        args = buildArgs('home', BASEURL, tag)
+    def DoSome(self):
 
-    method = args.get('method')
-    url = args.get('url')
-    tag = args.get('tag')
+        args = self.get_query_args(sys.argv[2])
+        if args is None or args.__len__() == 0:
+            tag = {
+                'pageNumber': 0,
+                'pageSize': self._PAGESIZE,
+                'posterWidth': self._POSTERWIDTH
+            }
 
-    if tag is not None and isinstance(tag, str):
-        tag = json.loads(tag)
+            args = self.buildArgs('home', self._BASEURL, tag)
 
-    {
-        'home': setHomeView
-    }[method](url, tag)
+        method = args.get('method')
+        url = args.get('url')
+        tag = args.get('tag')
 
-    guiManager.endOfDirectory()
+        if tag is not None and isinstance(tag, str):
+            tag = json.loads(tag)
+
+        {
+            'home': self.setHomeView,
+            'item': self.setItemView
+        }[method](url, tag)
+
+        self._guiManager.endOfDirectory()

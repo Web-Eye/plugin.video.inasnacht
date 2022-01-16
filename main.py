@@ -15,7 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from libs.hartaberfair import hartaberfair
+from libs.hartaberfair import HardAberFair
 
 if __name__ == '__main__':
-    hartaberfair()
+    app = HardAberFair()
+    app.DoSome()
+
