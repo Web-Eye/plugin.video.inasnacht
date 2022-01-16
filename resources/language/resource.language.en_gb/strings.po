@@ -39,3 +39,11 @@ msgstr ""
 msgctxt "#30105"
 msgid "seconds"
 msgstr ""
+
+msgctxt "#30106"
+msgid "Main"
+msgstr ""
+
+msgctxt "#30007"
+msgid "Preferred Quality"
+msgstr ""

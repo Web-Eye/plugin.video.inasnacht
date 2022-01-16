@@ -39,3 +39,11 @@ msgstr "Minuten"
 msgctxt "#30105"
 msgid "seconds"
 msgstr "Sekunden"
+
+msgctxt "#30106"
+msgid "Main"
+msgstr "Allgemein"
+
+msgctxt "#30007"
+msgid "Preferred Quality"
+msgstr "Bevorzugte Qualität"
