@@ -23,7 +23,7 @@ from libs.ardmediathek_api import ARDMediathekAPI
 from libs.kodion.gui_manager import GuiManager
 from libs.kodion.utils import utils as kodionUtils
 from libs.utils import utils
-from libs.translations import translations
+from libs.translations import *
 
 
 class HardAberFair:
@@ -45,7 +45,7 @@ class HardAberFair:
 
         # -- Settings -----------------------------------------------
         addon = kodionUtils.getAddon(self._ADDON_ID)
-        self._t = translations(addon)
+        self._t = Translations(addon)
 
     def setItemView(self, url, tag=None):
         API = ARDMediathekAPI(url, tag)
@@ -61,14 +61,14 @@ class HardAberFair:
                 title = teaser['title']
                 duration, unit = utils.getDuration(int(teaser['duration']))
                 duration = {
-                    'hours': duration + f' {self._t.getString(self._t.HOURS)}',
-                    'minutes': duration + f' {self._t.getString(self._t.MINUTES)}',
-                    'seconds': duration + f' {self._t.getString(self._t.SECONDS)}',
+                    'hours': duration + f' {self._t.getString(HOURS)}',
+                    'minutes': duration + f' {self._t.getString(MINUTES)}',
+                    'seconds': duration + f' {self._t.getString(SECONDS)}',
                 }[unit]
 
                 broadcastedOn = utils.getDateTime(teaser['broadcastedOn'], '%Y-%m-%dT%H:%M:%SZ').strftime('%d.%m.%Y, %H:%M:%S')
                 availableTo = utils.getDateTime(teaser['availableTo'], '%Y-%m-%dT%H:%M:%SZ').strftime('%d.%m.%Y, %H:%M:%S')
-                plot = f'[B]{title}[/B]\n\n[B]{self._t.getString(self._t.DURATION)}[/B]: {duration}\n[B]{self._t.getString(self._t.BROADCASTEDON)}[/B]: {broadcastedOn}\n[B]{self._t.getString(self._t.AVAILABLETO)}[/B]: {availableTo}'
+                plot = f'[B]{title}[/B]\n\n[B]{self._t.getString(DURATION)}[/B]: {duration}\n[B]{self._t.getString(BROADCASTEDON)}[/B]: {broadcastedOn}\n[B]{self._t.getString(AVAILABLETO)}[/B]: {availableTo}'
 
                 self._guiManager.addDirectory(title, teaser['poster'], plot, self.buildArgs('item', teaser['url']))
 

@@ -15,14 +15,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-class translations:
+DURATION = 'duration'
+BROADCASTEDON = 'broadcastedon'
+AVAILABLETO = 'availableto'
+HOURS = 'hours'
+MINUTES = 'minutes'
+SECONDS = 'seconds'
 
-    DURATION = 'duration'
-    BROADCASTEDON = 'broadcastedon'
-    AVAILABLETO = 'availableto'
-    HOURS = 'hours'
-    MINUTES = 'minutes'
-    SECONDS = 'seconds'
+
+class Translations:
 
     def __init__(self, addon):
         self._language = addon.getLocalizedString
@@ -30,10 +31,10 @@ class translations:
     def getString(self, name):
 
         return {
-            self.DURATION:          self._language(30100),
-            self.BROADCASTEDON:     self._language(30101),
-            self.AVAILABLETO:       self._language(30102),
-            self.HOURS:             self._language(30103),
-            self.MINUTES:           self._language(30104),
-            self.SECONDS:           self._language(30105)
+            DURATION:          self._language(30100),
+            BROADCASTEDON:     self._language(30101),
+            AVAILABLETO:       self._language(30102),
+            HOURS:             self._language(30103),
+            MINUTES:           self._language(30104),
+            SECONDS:           self._language(30105)
         }[name]
