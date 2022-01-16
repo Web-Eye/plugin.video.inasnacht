@@ -28,7 +28,8 @@ except ImportError:
     import libs.emu.xbmcaddon as xbmcaddon
     import libs.emu.xbmcvfs as xbmcvfs
 
-class utils:
+
+class Utils:
 
     @staticmethod
     def getAddon(_id):

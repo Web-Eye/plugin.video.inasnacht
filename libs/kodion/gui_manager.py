@@ -63,4 +63,3 @@ class GuiManager:
 
     def endOfDirectory(self):
         xbmcplugin.endOfDirectory(self._argv)
-

@@ -21,7 +21,7 @@ import urllib.parse
 
 from libs.ardmediathek_api import ARDMediathekAPI
 from libs.kodion.gui_manager import GuiManager
-from libs.kodion.utils import utils as kodionUtils
+from libs.kodion.utils import Utils as kodionUtils
 from libs.utils import utils
 from libs.translations import *
 
@@ -90,7 +90,8 @@ class HardAberFair:
                         'pageSize': self._PAGESIZE,
                         'posterWidth': self._POSTERWIDTH
                     }
-                    self._guiManager.addDirectory(f'Page {strPageNumber}', None, None, self.buildArgs('home', self._BASEURL, json.dumps(tag)))
+                    self._guiManager.addDirectory(f'Page {strPageNumber}', None, None,
+                                                  self.buildArgs('home', self._BASEURL, json.dumps(tag)))
 
     @staticmethod
     def get_query_args(s_args):
