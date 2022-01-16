@@ -37,3 +37,7 @@ class utils:
     @staticmethod
     def translatePath(value):
         return xbmcvfs.translatePath(value)
+
+    @staticmethod
+    def getSetting(addon, name):
+        return addon.getSetting(name)
