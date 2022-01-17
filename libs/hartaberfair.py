@@ -74,7 +74,9 @@ class HardAberFair:
                                                                                                           '%H:%M:%S')
                 availableTo = utils.getDateTime(teaser['availableTo'], '%Y-%m-%dT%H:%M:%SZ').strftime('%d.%m.%Y, '
                                                                                                       '%H:%M:%S')
-                plot = f'[B]{title}[/B]\n\n[B]{self._t.getString(DURATION)}[/B]: {duration}\n[B]{self._t.getString(BROADCASTEDON)}[/B]: {broadcastedOn}\n[B]{self._t.getString(AVAILABLETO)}[/B]: {availableTo} '
+                plot = f'[B]{title}[/B]\n\n[B]{self._t.getString(DURATION)}[/B]: {duration}\n' \
+                    f'[B]{self._t.getString(BROADCASTEDON)}[/B]: {broadcastedOn}\n' \
+                    f'[B]{self._t.getString(AVAILABLETO)}[/B]: {availableTo} '
 
                 self._guiManager.addDirectory(title, teaser['poster'], plot, self.buildArgs('item', teaser['url']))
 
