@@ -50,10 +50,18 @@ class HardAberFair:
         # -- Settings -----------------------------------------------
         addon = kodionUtils.getAddon(self._ADDON_ID)
         self._t = Translations(addon)
+        self._quality_id = int(kodionUtils.getSetting(addon, 'quality')) - 1
 
     def setItemView(self, url, tag=None):
+
+        tag = {
+            'posterWidth': self._POSTERWIDTH,
+            'quality': self._quality_id
+        }
+
         API = ARDMediathekAPI(url, tag)
-        pass
+        item = API.getItem()
+        # TODO: add item to gui
 
     def setHomeView(self, url, tag=None):
         API = ARDMediathekAPI(url, tag)
@@ -105,11 +113,18 @@ class HardAberFair:
 
     @staticmethod
     def buildArgs(method, url=None, tag=None):
-        return {
+
+        item = {
             'method': method,
-            'url': url,
-            'tag': tag
         }
+
+        if url is not None:
+            item['url'] = url
+
+        if tag is not None:
+            item['tag'] = tag
+
+        return item
 
     def DoSome(self):
 

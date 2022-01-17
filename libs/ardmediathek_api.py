@@ -31,11 +31,16 @@ class ARDMediathekAPI:
         self._posterWidth = 480
 
         if tag is not None:
-            pageNumber = tag.get('pageNumber')
-            pageSize = tag.get('pageSize')
-            url = url.replace('{pageNumber}', str(pageNumber))
-            url = url.replace('{pageSize}', str(pageSize))
-            self._posterWidth = tag.get('posterWidth')
+            if 'pageNumber' in tag:
+                pageNumber = tag.get('pageNumber')
+                url = url.replace('{pageNumber}', str(pageNumber))
+            if 'pageSize' in tag:
+                pageSize = tag.get('pageSize')
+                url = url.replace('{pageSize}', str(pageSize))
+            if 'posterWidth' in tag:
+                self._posterWidth = tag.get('posterWidth')
+            if 'quality' in tag:
+                self._quality_id = tag.get('quality')
 
         self._content = _getContent(url)
 
@@ -63,3 +68,28 @@ class ARDMediathekAPI:
         finally:
             pass
 
+    def getItem(self):
+        try:
+            if self._hasContent():
+                item = self._content['widgets'][0]
+                poster = item['image']['src'].replace('{width}', str(self._posterWidth))
+                mediastreamarray = item['mediaCollection']['embedded']['_mediaArray'][0]['_mediaStreamArray']
+                url = None
+
+                # TODO: solve it with lambda
+                for ms in mediastreamarray:
+                    if ms['_quality'] == self._quality_id:
+                        url = ms['_stream']
+
+                if url is not None:
+                    return {
+                        'title': self._content['title'],
+                        'availableTo': item['availableTo'],
+                        'broadcastedOn': item['broadcastedOn'],
+                        'plot': item['synopsis'],
+                        'poster': poster,
+                        'url': url
+                    }
+
+        finally:
+            pass
