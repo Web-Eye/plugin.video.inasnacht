@@ -86,7 +86,10 @@ class HardAberFair:
                     f'[B]{self._t.getString(BROADCASTEDON)}[/B]: {broadcastedOn}\n' \
                     f'[B]{self._t.getString(AVAILABLETO)}[/B]: {availableTo} '
 
-                self._guiManager.addDirectory(title, teaser['poster'], plot, self.buildArgs('item', teaser['url']))
+                infoLabels = {"Plot": str(plot)}
+
+                self._guiManager.addDirectory(title=title, poster=teaser['poster'], _type='Video', infoLabels=infoLabels,
+                                              args=self.buildArgs('item', teaser['url']))
 
             if pagination is not None:
                 pageNumber = int(pagination['pageNumber'])
@@ -100,8 +103,8 @@ class HardAberFair:
                         'pageSize': self._PAGESIZE,
                         'posterWidth': self._POSTERWIDTH
                     }
-                    self._guiManager.addDirectory(f'Page {strPageNumber}', None, None,
-                                                  self.buildArgs('home', self._BASEURL, json.dumps(tag)))
+                    self._guiManager.addDirectory(title=f'Page {strPageNumber}',
+                                                  args=self.buildArgs('home', self._BASEURL, json.dumps(tag)))
 
     @staticmethod
     def get_query_args(s_args):

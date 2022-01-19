@@ -44,22 +44,55 @@ class GuiManager:
     def setContent(self, content):
         xbmcplugin.setContent(self._argv, content)
 
-    def addDirectory(self, title, poster=None, plot=None, args=None):
+    def __setEntity(self, title, art, _property, _type, infolabels, isFolder, args):
         url = 'plugin://' + self._addon_id + '/?' + urllib.parse.urlencode(args)
-        try:
-            li = xbmcgui.ListItem(str(title))
-            if poster is not None:
-                li.setArt({'thumb': poster})
-            else:
-                li.setArt({'thumb': self._default_image_url})
-            li.setProperty('Fanart_Image',  self._fanart)
+        li = xbmcgui.ListItem(str(title))
+        if art is not None:
+            for item in art:
+                li.setArt(item)
 
-            if plot is not None:
-                li.setInfo(type="Video", infoLabels={"Plot": str(plot)})
+        # TODO: fix property issue
+        if _property is not None:
+            for item in _property:
+                print(str(item(0)))
+        #         li.setProperty(str(item(0)), str(item(1)))
 
-            xbmcplugin.addDirectoryItem(handle=self._argv, url=url, listitem=li, isFolder=True)
-        except NameError:
-            pass
+        if _type is not None and infolabels is not None:
+            li.setInfo(type=_type, infoLabels=infolabels)
+
+        xbmcplugin.addDirectoryItem(handle=self._argv, url=url, listitem=li, isFolder=isFolder)
+
+    def addDirectory(self, title, poster=None, fanArt=None, _type=None, infoLabels=None, args=None):
+        art = []
+        _property = []
+
+        if poster is not None:
+            art.append({'thumb': poster})
+        else:
+            art.append({'thumb': self._default_image_url})
+
+        if fanArt is not None:
+            _property.append({'Fanart_Image', fanArt})
+        elif self._fanart is not None:
+            _property.append({'Fanart_Image', self._fanart})
+
+        self.__setEntity(title, art, _property, _type, infoLabels, True, args)
+
+        # url = 'plugin://' + self._addon_id + '/?' + urllib.parse.urlencode(args)
+        # try:
+        #     li = xbmcgui.ListItem(str(title))
+        #     if poster is not None:
+        #         li.setArt({'thumb': poster})
+        #     else:
+        #         li.setArt({'thumb': self._default_image_url})
+        #     li.setProperty('Fanart_Image',  self._fanart)
+        #
+        #     if plot is not None:
+        #         li.setInfo(type="Video", infoLabels={"Plot": str(plot)})
+        #
+        #     xbmcplugin.addDirectoryItem(handle=self._argv, url=url, listitem=li, isFolder=True)
+        # except NameError:
+        #     pass
 
     def endOfDirectory(self):
         xbmcplugin.endOfDirectory(self._argv)
