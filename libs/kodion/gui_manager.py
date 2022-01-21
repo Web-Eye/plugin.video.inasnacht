@@ -51,11 +51,9 @@ class GuiManager:
             for item in art:
                 li.setArt(item)
 
-        # TODO: fix property issue
         if _property is not None:
             for item in _property:
-                print(str(item(0)))
-        #         li.setProperty(str(item(0)), str(item(1)))
+                li.setProperty(str(item[0]), str(item[1]))
 
         if _type is not None and infolabels is not None:
             li.setInfo(type=_type, infoLabels=infolabels)
@@ -72,9 +70,9 @@ class GuiManager:
             art.append({'thumb': self._default_image_url})
 
         if fanArt is not None:
-            _property.append({'Fanart_Image', fanArt})
+            _property.append(['Fanart_Image', fanArt])
         elif self._fanart is not None:
-            _property.append({'Fanart_Image', self._fanart})
+            _property.append(['Fanart_Image', self._fanart])
 
         self.__setEntity(title, art, _property, _type, infoLabels, True, args)
 
