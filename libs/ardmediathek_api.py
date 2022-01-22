@@ -74,12 +74,7 @@ class ARDMediathekAPI:
                 item = self._content['widgets'][0]
                 poster = item['image']['src'].replace('{width}', str(self._posterWidth))
                 mediastreamarray = item['mediaCollection']['embedded']['_mediaArray'][0]['_mediaStreamArray']
-                url = None
-
-                # TODO: solve it with lambda
-                for ms in mediastreamarray:
-                    if ms['_quality'] == self._quality_id:
-                        url = ms['_stream']
+                url = list(filter(lambda ms: ms['_quality'] == self._quality_id, mediastreamarray))[0]['_stream']
 
                 if url is not None:
                     return {
