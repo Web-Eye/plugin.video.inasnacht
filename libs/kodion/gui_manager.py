@@ -33,6 +33,11 @@ import urllib.parse
 
 class GuiManager:
 
+    SORT_METHOD_NONE = xbmcplugin.SORT_METHOD_NONE
+    SORT_METHOD_DATE = xbmcplugin.SORT_METHOD_DATE
+    SORT_METHOD_DURATION = xbmcplugin.SORT_METHOD_DURATION
+    SORT_METHOD_TITLE = xbmcplugin.SORT_METHOD_TITLE
+
     def __init__(self, argv, addon_id, default_image_url, fanart):
         self._argv = int(argv)
         self._addon_id = addon_id
@@ -92,6 +97,9 @@ class GuiManager:
         _property['IsPlayable'] = 'true'
 
         self.__setEntity(title, url, art, _property, _type, infoLabels, False)
+
+    def addSortMethod(self, sortMethod):
+        xbmcplugin.addSortMethod(self._argv, sortMethod)
 
     def endOfDirectory(self):
         xbmcplugin.endOfDirectory(self._argv)

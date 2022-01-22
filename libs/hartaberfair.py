@@ -97,7 +97,13 @@ class HardAberFair:
                     f'[B]{self._t.getString(BROADCASTEDON)}[/B]: {broadcastedOn}\n' \
                     f'[B]{self._t.getString(AVAILABLETO)}[/B]: {availableTo} '
 
-                infoLabels = {"Plot": str(plot)}
+                infoLabels = {
+                    'Title': title,
+                    'Plot': str(plot),
+                    'Date': teaser['broadcastedOn'],
+                    'Aired': teaser['broadcastedOn'],
+                    'Duration': teaser['duration']
+                }
 
                 self._guiManager.addDirectory(title=title, poster=teaser['poster'], _type='Video', infoLabels=infoLabels,
                                               args=self.buildArgs('item', teaser['url']))
@@ -164,4 +170,6 @@ class HardAberFair:
             'item': self.setItemView
         }[method](url, tag)
 
+        # self._guiManager.addSortMethod(GuiManager.SORT_METHOD_NONE)
+        # self._guiManager.addSortMethod(GuiManager.SORT_METHOD_DATE)
         self._guiManager.endOfDirectory()

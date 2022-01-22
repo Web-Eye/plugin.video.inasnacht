@@ -15,8 +15,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+SORT_METHOD_NONE = 0
+SORT_METHOD_DATE = 3
+SORT_METHOD_DURATION = 8
+SORT_METHOD_TITLE = 9
+
+
 def addDirectoryItem(handle, url, listitem, isFolder):
     print(f'addDirectoryItem({handle}, {url}, {listitem}, {isFolder})')
+
+
+def addSortMethod(handle, sortMethod):
+    print(f'addSortMethod({handle}, {sortMethod})')
 
 
 def endOfDirectory(arg):
