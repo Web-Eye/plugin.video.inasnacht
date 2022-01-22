@@ -57,17 +57,21 @@ msgid "Suppress Shows short than"
 msgstr "Unterdrücke Sendungen, die kürzer sind als"
 
 msgctxt "#30010"
+msgid "Off"
+msgstr "Aus"
+
+msgctxt "#30011"
 msgid "30 Seconds"
 msgstr "30 Sekunden"
 
-msgctxt "#30011"
+msgctxt "#30012"
 msgid "1 Minute"
 msgstr "1 Minute"
 
-msgctxt "#30012"
+msgctxt "#30013"
 msgid "3 Minutes"
 msgstr "3 Minuten"
 
-msgctxt "#30013"
+msgctxt "#30014"
 msgid "5 Minutes"
 msgstr "5 Minuten"

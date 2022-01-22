@@ -51,6 +51,15 @@ class HardAberFair:
         addon = kodionUtils.getAddon(self._ADDON_ID)
         self._t = Translations(addon)
         self._quality_id = int(kodionUtils.getSetting(addon, 'quality'))
+        self._suppress_signLanguage = (kodionUtils.getSetting(addon, 'suppress_signLanguage') == "true")
+        suppress_duration_id = kodionUtils.getSetting(addon, 'suppress_duration')
+        self._suppress_durationSeconds = {
+            '0': 0,
+            '1': 30,
+            '2': 60,
+            '3': 180,
+            '4': 300
+        }[suppress_duration_id]
 
     def setItemView(self, url, tag=None):
 
@@ -74,13 +83,23 @@ class HardAberFair:
         self._guiManager.addItem(title=title, url=item['url'], poster=item['poster'], _type='video',
                                  infoLabels=infoLabels)
 
+    def _isValidTeaser(self, teaser):
+        if self._suppress_signLanguage and '(mit Gebärdensprache)' in teaser['title']:
+            return False
+
+        if self._suppress_durationSeconds > 0 and teaser['duration'] < self._suppress_durationSeconds:
+            return False
+
+        return True
+
     def setHomeView(self, url, tag=None):
         API = ARDMediathekAPI(url, tag)
         pagination = API.getPagination()
         teasers = API.getTeaser()
 
         if teasers is not None:
-            for teaser in teasers:
+            # for teaser in teasers:
+            for teaser in list(filter(lambda t: self._isValidTeaser(t), teasers)):
                 title = teaser['title']
                 duration, unit = utils.getDuration(int(teaser['duration']))
                 duration = {

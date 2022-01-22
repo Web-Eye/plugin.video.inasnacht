@@ -20,15 +20,15 @@ class Addon:
     def __init__(self, id):
         pass
 
-
     def getSetting(self, name):
         if name == 'quality':
-            return 2
+            return "2"
         elif name == 'start_page':
-            return 1
-        elif name == 'extract_plot':
-            return True
-
+            return "1"
+        elif name == 'suppress_signLanguage':
+            return "true"
+        elif name == 'suppress_duration':
+            return "2"
 
     def getLocalizedString(self, id):
         return 'dummy'
