@@ -44,8 +44,7 @@ class GuiManager:
     def setContent(self, content):
         xbmcplugin.setContent(self._argv, content)
 
-    def __setEntity(self, title, art, _property, _type, infolabels, isFolder, args):
-        url = 'plugin://' + self._addon_id + '/?' + urllib.parse.urlencode(args)
+    def __setEntity(self, title, url, art, _property, _type, infolabels, isFolder):
         li = xbmcgui.ListItem(str(title))
         if art is not None:
             li.setArt(art)
@@ -73,7 +72,26 @@ class GuiManager:
         elif self._fanart is not None:
             _property['Fanart_Image'] = self._fanart
 
-        self.__setEntity(title, art, _property, _type, infoLabels, True, args)
+        url = 'plugin://' + self._addon_id + '/?' + urllib.parse.urlencode(args)
+        self.__setEntity(title, url, art, _property, _type, infoLabels, True)
+
+    def addItem(self, title, url, poster=None, fanArt=None, _type=None, infoLabels=None):
+        art = {}
+        _property = {}
+
+        if poster is not None:
+            art['thumb'] = poster
+        else:
+            art['thumb'] = self._default_image_url
+
+        if fanArt is not None:
+            _property['Fanart_Image'] = fanArt
+        elif self._fanart is not None:
+            _property['Fanart_Image'] = self._fanart
+
+        _property['IsPlayable'] = 'true'
+
+        self.__setEntity(title, url, art, _property, _type, infoLabels, False)
 
     def endOfDirectory(self):
         xbmcplugin.endOfDirectory(self._argv)

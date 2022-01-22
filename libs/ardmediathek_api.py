@@ -73,8 +73,10 @@ class ARDMediathekAPI:
             if self._hasContent():
                 item = self._content['widgets'][0]
                 poster = item['image']['src'].replace('{width}', str(self._posterWidth))
-                mediastreamarray = item['mediaCollection']['embedded']['_mediaArray'][0]['_mediaStreamArray']
+                embedded = item['mediaCollection']['embedded']
+                mediastreamarray = embedded['_mediaArray'][0]['_mediaStreamArray']
                 url = list(filter(lambda ms: ms['_quality'] == self._quality_id, mediastreamarray))[0]['_stream']
+                duration = embedded['_duration']
 
                 if url is not None:
                     return {
@@ -83,7 +85,8 @@ class ARDMediathekAPI:
                         'broadcastedOn': item['broadcastedOn'],
                         'plot': item['synopsis'],
                         'poster': poster,
-                        'url': url
+                        'url': url,
+                        'duration': duration
                     }
 
         finally:

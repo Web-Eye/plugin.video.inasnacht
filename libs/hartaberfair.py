@@ -50,7 +50,7 @@ class HardAberFair:
         # -- Settings -----------------------------------------------
         addon = kodionUtils.getAddon(self._ADDON_ID)
         self._t = Translations(addon)
-        self._quality_id = int(kodionUtils.getSetting(addon, 'quality')) - 1
+        self._quality_id = int(kodionUtils.getSetting(addon, 'quality'))
 
     def setItemView(self, url, tag=None):
 
@@ -61,7 +61,18 @@ class HardAberFair:
 
         API = ARDMediathekAPI(url, tag)
         item = API.getItem()
-        # TODO: add item to gui
+        title = item['title']
+
+        infoLabels = {
+            'Title': title,
+            'Plot': item['plot'],
+            'Date': item['broadcastedOn'],
+            'Aired': item['broadcastedOn'],
+            'Duration': item['duration']
+        }
+
+        self._guiManager.addItem(title=title, url=item['url'], poster=item['poster'], _type='video',
+                                 infoLabels=infoLabels)
 
     def setHomeView(self, url, tag=None):
         API = ARDMediathekAPI(url, tag)
