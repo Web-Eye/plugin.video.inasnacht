@@ -48,12 +48,11 @@ class GuiManager:
         url = 'plugin://' + self._addon_id + '/?' + urllib.parse.urlencode(args)
         li = xbmcgui.ListItem(str(title))
         if art is not None:
-            for item in art:
-                li.setArt(item)
+            li.setArt(art)
 
         if _property is not None:
-            for item in _property:
-                li.setProperty(str(item[0]), str(item[1]))
+            for key, value in _property.items():
+                li.setProperty(key, value)
 
         if _type is not None and infolabels is not None:
             li.setInfo(type=_type, infoLabels=infolabels)
@@ -61,36 +60,20 @@ class GuiManager:
         xbmcplugin.addDirectoryItem(handle=self._argv, url=url, listitem=li, isFolder=isFolder)
 
     def addDirectory(self, title, poster=None, fanArt=None, _type=None, infoLabels=None, args=None):
-        art = []
-        _property = []
+        art = {}
+        _property = {}
 
         if poster is not None:
-            art.append({'thumb': poster})
+            art['thumb'] = poster
         else:
-            art.append({'thumb': self._default_image_url})
+            art['thumb'] = self._default_image_url
 
         if fanArt is not None:
-            _property.append(['Fanart_Image', fanArt])
+            _property['Fanart_Image'] = fanArt
         elif self._fanart is not None:
-            _property.append(['Fanart_Image', self._fanart])
+            _property['Fanart_Image'] = self._fanart
 
         self.__setEntity(title, art, _property, _type, infoLabels, True, args)
-
-        # url = 'plugin://' + self._addon_id + '/?' + urllib.parse.urlencode(args)
-        # try:
-        #     li = xbmcgui.ListItem(str(title))
-        #     if poster is not None:
-        #         li.setArt({'thumb': poster})
-        #     else:
-        #         li.setArt({'thumb': self._default_image_url})
-        #     li.setProperty('Fanart_Image',  self._fanart)
-        #
-        #     if plot is not None:
-        #         li.setInfo(type="Video", infoLabels={"Plot": str(plot)})
-        #
-        #     xbmcplugin.addDirectoryItem(handle=self._argv, url=url, listitem=li, isFolder=True)
-        # except NameError:
-        #     pass
 
     def endOfDirectory(self):
         xbmcplugin.endOfDirectory(self._argv)
