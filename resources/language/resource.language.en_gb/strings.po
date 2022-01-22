@@ -47,3 +47,27 @@ msgstr ""
 msgctxt "#30007"
 msgid "Preferred Quality"
 msgstr ""
+
+msgctxt "#30008"
+msgid "Suppress Sign-Language Shows"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Suppress Shows short than"
+msgstr ""
+
+msgctxt "#30010"
+msgid "30 Seconds"
+msgstr ""
+
+msgctxt "#30011"
+msgid "1 Minute"
+msgstr ""
+
+msgctxt "#30012"
+msgid "3 Minutes"
+msgstr ""
+
+msgctxt "#30013"
+msgid "5 Minutes"
+msgstr ""

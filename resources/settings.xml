@@ -2,8 +2,7 @@
 <settings>
   <category label="30106">
     <setting id="quality" type="enum" label="30007" values="270p|360p|540p|720p" default="3"/>
-<!--  <setting id="start_page" type="enum" label="30002" values="Home|Latest|Library|Most Watched|Top Movies|Opening This Week|Coming Soon" default="0" />-->
-<!--  <setting id="quality" type="enum" label="30001" values="480p|720p|1080p|Best" default="2"/> -->
-<!--  <setting id="extract_plot" type="bool" label="30110" default="false"/>  -->
+    <setting id="suppress_signLanguage" type="bool" label="30008" default="false"/>
+    <setting id="suppress_duration" type="select" label="30009" lvalues="30010|30011|30012|30013" default="1"/>
   </category>
 </settings>
