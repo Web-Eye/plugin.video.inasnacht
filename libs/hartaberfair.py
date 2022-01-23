@@ -19,6 +19,7 @@ import sys
 import urllib
 import urllib.parse
 
+from libs.kodion.addon import Addon
 from libs.ardmediathek_api import ARDMediathekAPI
 from libs.kodion.gui_manager import GuiManager
 from libs.kodion.utils import Utils as kodionUtils
@@ -48,11 +49,11 @@ class HardAberFair:
         self._guiManager.setContent('movies')
 
         # -- Settings -----------------------------------------------
-        addon = kodionUtils.getAddon(self._ADDON_ID)
+        addon = Addon(self._ADDON_ID)
         self._t = Translations(addon)
-        self._quality_id = int(kodionUtils.getSetting(addon, 'quality'))
-        self._suppress_signLanguage = (kodionUtils.getSetting(addon, 'suppress_signLanguage') == "true")
-        suppress_duration_id = kodionUtils.getSetting(addon, 'suppress_duration')
+        self._quality_id = int(addon.getSetting('quality'))
+        self._suppress_signLanguage = (addon.getSetting('suppress_signLanguage') == 'true')
+        suppress_duration_id = addon.getSetting('suppress_duration')
         self._suppress_durationSeconds = {
             '0': 0,
             '1': 30,

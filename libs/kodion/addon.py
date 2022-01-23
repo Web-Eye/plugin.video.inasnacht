@@ -15,7 +15,24 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-def translatePath(arg):
-    print(f'translatePath({arg})')
-    return arg
+import os
+
+import xbmcaddon
+
+
+class Addon(xbmcaddon.Addon):
+
+    def __init__(self, id):
+        xbmcaddon.Addon.__init__(self, id)
+        self._debug = os.getenv('kodi_debug') is not None
+
+    def getSetting(self, name):
+        if not self._debug:
+            return xbmcaddon.Addon.getSetting(self, name)
+        else:
+            return {
+                'quality': '3',
+                'suppress_signLanguage': 'true',
+                'suppress_duration': '3'
+            }[name]
 

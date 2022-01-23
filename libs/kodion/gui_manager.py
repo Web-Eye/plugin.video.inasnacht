@@ -15,18 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-try:
-    # import xbmc
-    import xbmcplugin
-    import xbmcgui
-    # import xbmcaddon
-    # import xbmcvfs
-except ImportError:
-    # import libs.emu.xbmc as xbmc
-    import libs.emu.xbmcplugin as xbmcplugin
-    import libs.emu.xbmcgui as xbmcgui
-    # import libs.emu.xbmcaddon as xbmcaddon
-    # import libs.emu.xbmcvfs as xbmcvfs
+import xbmcplugin
+import xbmcgui
 
 import urllib.parse
 
