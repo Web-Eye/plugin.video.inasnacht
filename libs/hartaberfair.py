@@ -99,34 +99,34 @@ class HardAberFair:
         teasers = API.getTeaser()
 
         if teasers is not None:
-            # for teaser in teasers:
-            for teaser in list(filter(lambda t: self._isValidTeaser(t), teasers)):
-                title = teaser['title']
-                duration, unit = utils.getDuration(int(teaser['duration']))
-                duration = {
-                    'hours': duration + f' {self._t.getString(HOURS)}',
-                    'minutes': duration + f' {self._t.getString(MINUTES)}',
-                    'seconds': duration + f' {self._t.getString(SECONDS)}',
-                }[unit]
+            for teaser in teasers:
+                if self._isValidTeaser(teaser):
+                    title = teaser['title']
+                    duration, unit = utils.getDuration(int(teaser['duration']))
+                    duration = {
+                        'hours': duration + f' {self._t.getString(HOURS)}',
+                        'minutes': duration + f' {self._t.getString(MINUTES)}',
+                        'seconds': duration + f' {self._t.getString(SECONDS)}',
+                    }[unit]
 
-                broadcastedOn = utils.getDateTime(teaser['broadcastedOn'], '%Y-%m-%dT%H:%M:%SZ').strftime('%d.%m.%Y, '
+                    broadcastedOn = utils.getDateTime(teaser['broadcastedOn'], '%Y-%m-%dT%H:%M:%SZ').strftime('%d.%m.%Y, '
                                                                                                           '%H:%M:%S')
-                availableTo = utils.getDateTime(teaser['availableTo'], '%Y-%m-%dT%H:%M:%SZ').strftime('%d.%m.%Y, '
+                    availableTo = utils.getDateTime(teaser['availableTo'], '%Y-%m-%dT%H:%M:%SZ').strftime('%d.%m.%Y, '
                                                                                                       '%H:%M:%S')
-                plot = f'[B]{title}[/B]\n\n[B]{self._t.getString(DURATION)}[/B]: {duration}\n' \
-                    f'[B]{self._t.getString(BROADCASTEDON)}[/B]: {broadcastedOn}\n' \
-                    f'[B]{self._t.getString(AVAILABLETO)}[/B]: {availableTo} '
+                    plot = f'[B]{title}[/B]\n\n[B]{self._t.getString(DURATION)}[/B]: {duration}\n' \
+                        f'[B]{self._t.getString(BROADCASTEDON)}[/B]: {broadcastedOn}\n' \
+                        f'[B]{self._t.getString(AVAILABLETO)}[/B]: {availableTo} '
 
-                infoLabels = {
-                    'Title': title,
-                    'Plot': str(plot),
-                    'Date': teaser['broadcastedOn'],
-                    'Aired': teaser['broadcastedOn'],
-                    'Duration': teaser['duration']
-                }
+                    infoLabels = {
+                        'Title': title,
+                        'Plot': str(plot),
+                        'Date': teaser['broadcastedOn'],
+                        'Aired': teaser['broadcastedOn'],
+                        'Duration': teaser['duration']
+                    }
 
-                self._guiManager.addDirectory(title=title, poster=teaser['poster'], _type='Video', infoLabels=infoLabels,
-                                              args=self.buildArgs('item', teaser['url']))
+                    self._guiManager.addDirectory(title=title, poster=teaser['poster'], _type='Video', infoLabels=infoLabels,
+                                                  args=self.buildArgs('item', teaser['url']))
 
             if pagination is not None:
                 pageNumber = int(pagination['pageNumber'])
