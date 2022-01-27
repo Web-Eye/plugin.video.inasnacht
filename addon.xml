@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
     id="plugin.video.hartaberfair"
-    version="1.0.0"
+    version="1.0.1"
     name="Hart aber Fair"
     provider-name="WebEye">
   <requires>
@@ -18,7 +18,7 @@
     <platform>all</platform>
     <license>GPL-3.0-only</license>
     <website>https://github.com/Web-Eye/plugin.video.hartaberfair</website>
-    <source>https://github.com/Web-Eye/plugin.video.hartaberfaird</source>
+    <source>https://github.com/Web-Eye/plugin.video.hartaberfair</source>
     <summary lang="de">Mediathek der bekannten ARD Talk-Show "Hart aber Fair"</summary>
     <summary lang="en">Broadcasts from the famous ARD Talk-Show "Hart aber Fair" (German Television)</summary>
     <disclaimer lang="en_GB">Use at your own risk. Post suggestions, improvements or bug reports directly to GitHub.</disclaimer>
