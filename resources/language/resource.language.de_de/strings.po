@@ -75,3 +75,11 @@ msgstr "3 Minuten"
 msgctxt "#30014"
 msgid "5 Minutes"
 msgstr "5 Minuten"
+
+msgctxt "#30015"
+msgid "Items per Page"
+msgstr "Einträge pro Seite"
+
+msgctxt "#30016"
+msgid "Skip Details-View"
+msgstr "Überspringe Detailansicht"

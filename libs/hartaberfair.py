@@ -52,6 +52,8 @@ class HardAberFair:
         addon = Addon(self._ADDON_ID)
         self._t = Translations(addon)
         self._quality_id = int(addon.getSetting('quality'))
+        self._page_itemCount = int(addon.getSetting('page_itemCount'))
+        self._skip_itemPage = (addon.getSetting('skip_itemPage') == 'true')
         self._suppress_signLanguage = (addon.getSetting('suppress_signLanguage') == 'true')
         suppress_duration_id = addon.getSetting('suppress_duration')
         self._suppress_durationSeconds = {

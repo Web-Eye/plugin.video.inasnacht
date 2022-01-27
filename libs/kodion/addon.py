@@ -33,6 +33,8 @@ class Addon(xbmcaddon.Addon):
             return {
                 'quality': '3',
                 'suppress_signLanguage': 'true',
-                'suppress_duration': '3'
+                'suppress_duration': '3',
+                'page_itemCount': '3',
+                'skip_itemPage': 'false'
             }[name]
 
