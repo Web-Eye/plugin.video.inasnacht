@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
     id="plugin.video.hartaberfair"
-    version="1.0.1"
+    version="1.0.2"
     name="Hart aber Fair"
     provider-name="WebEye">
   <requires>
@@ -26,11 +26,9 @@
     <assets>
       <icon>resources/assets/icon.png</icon>
       <fanart>resources/assets/fanart.jpg</fanart>
-<!--
       <screenshot>resources/assets/screenshot_1.png</screenshot>
       <screenshot>resources/assets/screenshot_2.png</screenshot>
       <screenshot>resources/assets/screenshot_3.png</screenshot>
--->
     </assets>
     <news>
     </news>
