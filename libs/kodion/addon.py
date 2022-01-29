@@ -35,6 +35,6 @@ class Addon(xbmcaddon.Addon):
                 'suppress_signLanguage': 'true',
                 'suppress_duration': '3',
                 'page_itemCount': '3',
-                'skip_itemPage': 'false'
+                'skip_itemPage': 'true'
             }[name]
 

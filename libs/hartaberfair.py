@@ -37,7 +37,6 @@ class HardAberFair:
                         '/Y3JpZDovL3dkci5kZS9oYXJ0IGFiZXIgZmFpcg?pageNumber={pageNumber}&pageSize={' \
                         'pageSize}&embedded=true&seasoned=false&seasonNumber=&withAudiodescription=false' \
                         '&withOriginalWithSubtitle=false&withOriginalversion=false '
-        self._PAGESIZE = 30
         self._POSTERWIDTH = 480
 
         # ADDONTHUMB = utils.translatePath('special://home/addons/' + ADDON_ID + '/resources/assets/icon.png')
@@ -52,17 +51,23 @@ class HardAberFair:
         addon = Addon(self._ADDON_ID)
         self._t = Translations(addon)
         self._quality_id = int(addon.getSetting('quality'))
-        self._page_itemCount = int(addon.getSetting('page_itemCount'))
+        self._PAGESIZE = {
+            '0': 5,
+            '1': 10,
+            '2': 15,
+            '3': 20,
+            '4': 25,
+            '5': 30
+        }[addon.getSetting('page_itemCount')]
         self._skip_itemPage = (addon.getSetting('skip_itemPage') == 'true')
         self._suppress_signLanguage = (addon.getSetting('suppress_signLanguage') == 'true')
-        suppress_duration_id = addon.getSetting('suppress_duration')
         self._suppress_durationSeconds = {
             '0': 0,
             '1': 30,
             '2': 60,
             '3': 180,
             '4': 300
-        }[suppress_duration_id]
+        }[addon.getSetting('suppress_duration')]
 
     def setItemView(self, url, tag=None):
 
@@ -95,6 +100,38 @@ class HardAberFair:
 
         return True
 
+    def addItemPage(self, teaser):
+        title = teaser['title']
+        duration, unit = utils.getDuration(int(teaser['duration']))
+        duration = {
+            'hours': duration + f' {self._t.getString(HOURS)}',
+            'minutes': duration + f' {self._t.getString(MINUTES)}',
+            'seconds': duration + f' {self._t.getString(SECONDS)}',
+        }[unit]
+
+        broadcastedOn = utils.getDateTime(teaser['broadcastedOn'], '%Y-%m-%dT%H:%M:%SZ').strftime('%d.%m.%Y, '
+                                                                                                  '%H:%M:%S')
+        availableTo = utils.getDateTime(teaser['availableTo'], '%Y-%m-%dT%H:%M:%SZ').strftime('%d.%m.%Y, '
+                                                                                              '%H:%M:%S')
+        plot = f'[B]{title}[/B]\n\n[B]{self._t.getString(DURATION)}[/B]: {duration}\n' \
+               f'[B]{self._t.getString(BROADCASTEDON)}[/B]: {broadcastedOn}\n' \
+               f'[B]{self._t.getString(AVAILABLETO)}[/B]: {availableTo} '
+
+        infoLabels = {
+            'Title': title,
+            'Plot': str(plot),
+            'Date': teaser['broadcastedOn'],
+            'Aired': teaser['broadcastedOn'],
+            'Duration': teaser['duration']
+        }
+
+        self._guiManager.addDirectory(title=title, poster=teaser['poster'], _type='Video',
+                                      infoLabels=infoLabels, args=self.buildArgs('item', teaser['url']))
+
+    def addClip(self, teaser):
+        url = teaser['url']
+        self.setItemView(url, None)
+
     def setHomeView(self, url, tag=None):
         API = ARDMediathekAPI(url, tag)
         pagination = API.getPagination()
@@ -103,32 +140,10 @@ class HardAberFair:
         if teasers is not None:
             for teaser in teasers:
                 if self._isValidTeaser(teaser):
-                    title = teaser['title']
-                    duration, unit = utils.getDuration(int(teaser['duration']))
-                    duration = {
-                        'hours': duration + f' {self._t.getString(HOURS)}',
-                        'minutes': duration + f' {self._t.getString(MINUTES)}',
-                        'seconds': duration + f' {self._t.getString(SECONDS)}',
-                    }[unit]
-
-                    broadcastedOn = utils.getDateTime(teaser['broadcastedOn'], '%Y-%m-%dT%H:%M:%SZ').strftime('%d.%m.%Y, '
-                                                                                                          '%H:%M:%S')
-                    availableTo = utils.getDateTime(teaser['availableTo'], '%Y-%m-%dT%H:%M:%SZ').strftime('%d.%m.%Y, '
-                                                                                                      '%H:%M:%S')
-                    plot = f'[B]{title}[/B]\n\n[B]{self._t.getString(DURATION)}[/B]: {duration}\n' \
-                        f'[B]{self._t.getString(BROADCASTEDON)}[/B]: {broadcastedOn}\n' \
-                        f'[B]{self._t.getString(AVAILABLETO)}[/B]: {availableTo} '
-
-                    infoLabels = {
-                        'Title': title,
-                        'Plot': str(plot),
-                        'Date': teaser['broadcastedOn'],
-                        'Aired': teaser['broadcastedOn'],
-                        'Duration': teaser['duration']
-                    }
-
-                    self._guiManager.addDirectory(title=title, poster=teaser['poster'], _type='Video', infoLabels=infoLabels,
-                                                  args=self.buildArgs('item', teaser['url']))
+                    {
+                        False: self.addItemPage,
+                        True: self.addClip
+                    }[self._skip_itemPage](teaser)
 
             if pagination is not None:
                 pageNumber = int(pagination['pageNumber'])
