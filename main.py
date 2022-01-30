@@ -15,9 +15,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-from libs.hartaberfair import HardAberFair
+from libs.ardmediathek_client import ArdMediathekClient
 
 if __name__ == '__main__':
-    app = HardAberFair()
+    addon_id = 'plugin.video.inasnacht'
+    baseurl = 'https://api.ardmediathek.de/page-gateway/widgets/daserste/asset' \
+              '/Y3JpZDovL2Rhc2Vyc3RlLm5kci5kZS8xNDA5?pageNumber={pageNumber}&pageSize={' \
+              'pageSize}&embedded=true&seasoned=false&seasonNumber=&withAudiodescription=false' \
+              '&withOriginalWithSubtitle=false&withOriginalversion=false'
+
+    app = ArdMediathekClient(addon_id, baseurl)
     app.DoSome()
 

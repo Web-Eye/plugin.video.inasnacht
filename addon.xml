@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
-    id="plugin.video.hartaberfair"
-    version="1.0.2"
-    name="Hart aber Fair"
+    id="plugin.video.inasnacht"
+    version="1.0.0"
+    name="Inas Nacht"
     provider-name="WebEye">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
@@ -17,18 +17,20 @@
     <language>en</language>
     <platform>all</platform>
     <license>GPL-3.0-only</license>
-    <website>https://github.com/Web-Eye/plugin.video.hartaberfair</website>
-    <source>https://github.com/Web-Eye/plugin.video.hartaberfair</source>
-    <summary lang="de">Mediathek der bekannten ARD Talk-Show "Hart aber Fair"</summary>
-    <summary lang="en">Broadcasts from the famous ARD Talk-Show "Hart aber Fair" (German Television)</summary>
+    <website>https://github.com/Web-Eye/plugin.video.inasnacht</website>
+    <source>https://github.com/Web-Eye/plugin.video.inasnacht</source>
+    <summary lang="de">Mediathek der bekannten NDR Talk-Show "Inas Nacht"</summary>
+    <summary lang="en">Broadcasts from the famous NDR Talk-Show "Inas Nacht" (German Television)</summary>
     <disclaimer lang="en_GB">Use at your own risk. Post suggestions, improvements or bug reports directly to GitHub.</disclaimer>
     <disclaimer lang="de_DE">Benutzung auf eigene Gefahr. Anregungen, Verbesserungen oder Bugs bitte direkt über GitHub posten.</disclaimer>
     <assets>
       <icon>resources/assets/icon.png</icon>
       <fanart>resources/assets/fanart.jpg</fanart>
+      <!--
       <screenshot>resources/assets/screenshot_1.png</screenshot>
       <screenshot>resources/assets/screenshot_2.png</screenshot>
       <screenshot>resources/assets/screenshot_3.png</screenshot>
+      -->
     </assets>
     <news>
     </news>

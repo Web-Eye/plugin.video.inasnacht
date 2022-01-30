@@ -27,16 +27,13 @@ from libs.utils import utils
 from libs.translations import *
 
 
-class HardAberFair:
+class ArdMediathekClient:
 
-    def __init__(self):
+    def __init__(self, addon_id, baseurl):
 
         # -- Constants ----------------------------------------------
-        self._ADDON_ID = 'plugin.video.hartaberfair'
-        self._BASEURL = 'https://api.ardmediathek.de/page-gateway/widgets/daserste/asset' \
-                        '/Y3JpZDovL3dkci5kZS9oYXJ0IGFiZXIgZmFpcg?pageNumber={pageNumber}&pageSize={' \
-                        'pageSize}&embedded=true&seasoned=false&seasonNumber=&withAudiodescription=false' \
-                        '&withOriginalWithSubtitle=false&withOriginalversion=false '
+        self._ADDON_ID = addon_id
+        self._BASEURL = baseurl
         self._POSTERWIDTH = 480
 
         # ADDONTHUMB = utils.translatePath('special://home/addons/' + ADDON_ID + '/resources/assets/icon.png')
