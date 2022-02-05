@@ -29,14 +29,17 @@ from libs.translations import *
 
 class ArdMediathekClient:
 
-    def __init__(self, addon_id, baseurl):
+    def __init__(self, addon_id, mediathek_id):
 
         # -- Constants ----------------------------------------------
         self._ADDON_ID = addon_id
-        self._BASEURL = baseurl
+        self._BASEURL = f'https://api.ardmediathek.de/page-gateway/widgets/daserste/asset/{mediathek_id}' \
+                        '?pageNumber={pageNumber}&pageSize={' \
+                        'pageSize}&embedded=true&seasoned=false&seasonNumber=&withAudiodescription=false' \
+                        '&withOriginalWithSubtitle=false&withOriginalversion=false'
         self._POSTERWIDTH = 480
 
-        # ADDONTHUMB = utils.translatePath('special://home/addons/' + ADDON_ID + '/resources/assets/icon.png')
+        # ADDONTHUMB = kodionUtils.translatePath('special://home/addons/' + ADDON_ID + '/resources/assets/icon.png')
         self._FANART = kodionUtils.translatePath('special://home/addons/' + self._ADDON_ID + '/resources/assets'
                                                                                              '/fanart.jpg')
         self._DEFAULT_IMAGE_URL = ''
@@ -57,7 +60,7 @@ class ArdMediathekClient:
             '5': 30
         }[addon.getSetting('page_itemCount')]
         self._skip_itemPage = (addon.getSetting('skip_itemPage') == 'true')
-        self._suppress_signLanguage = (addon.getSetting('suppress_signLanguage') == 'true')
+        self._suppress_MusicClips = (addon.getSetting('suppress_MusicClips') == 'true')
         self._suppress_durationSeconds = {
             '0': 0,
             '1': 30,
@@ -75,21 +78,22 @@ class ArdMediathekClient:
 
         API = ARDMediathekAPI(url, tag)
         item = API.getItem()
-        title = item['title']
+        if item is not None:
+            title = item['title']
 
-        infoLabels = {
-            'Title': title,
-            'Plot': item['plot'],
-            'Date': item['broadcastedOn'],
-            'Aired': item['broadcastedOn'],
-            'Duration': item['duration']
-        }
+            infoLabels = {
+                'Title': title,
+                'Plot': item['plot'],
+                'Date': item['broadcastedOn'],
+                'Aired': item['broadcastedOn'],
+                'Duration': item['duration']
+            }
 
-        self._guiManager.addItem(title=title, url=item['url'], poster=item['poster'], _type='video',
-                                 infoLabels=infoLabels)
+            self._guiManager.addItem(title=title, url=item['url'], poster=item['poster'], _type='video',
+                                     infoLabels=infoLabels)
 
     def _isValidTeaser(self, teaser):
-        if self._suppress_signLanguage and '(mit Gebärdensprache)' in teaser['title']:
+        if self._suppress_MusicClips and 'Musik bei Inas Nacht:' in teaser['title']:
             return False
 
         if self._suppress_durationSeconds > 0 and teaser['duration'] < self._suppress_durationSeconds:
@@ -106,10 +110,11 @@ class ArdMediathekClient:
             'seconds': duration + f' {self._t.getString(SECONDS)}',
         }[unit]
 
-        broadcastedOn = utils.getDateTime(teaser['broadcastedOn'], '%Y-%m-%dT%H:%M:%SZ').strftime('%d.%m.%Y, '
-                                                                                                  '%H:%M:%S')
-        availableTo = utils.getDateTime(teaser['availableTo'], '%Y-%m-%dT%H:%M:%SZ').strftime('%d.%m.%Y, '
-                                                                                              '%H:%M:%S')
+        broadcastedOn = utils.formatDateTime(utils.getDateTime(teaser['broadcastedOn'], '%Y-%m-%dT%H:%M:%SZ'),
+                                             '%d.%m.%Y, %H:%M:%S')
+        availableTo = utils.formatDateTime(utils.getDateTime(teaser['availableTo'], '%Y-%m-%dT%H:%M:%SZ'),
+                                           '%d.%m.%Y, %H:%M:%S')
+
         plot = f'[B]{title}[/B]\n\n[B]{self._t.getString(DURATION)}[/B]: {duration}\n' \
                f'[B]{self._t.getString(BROADCASTEDON)}[/B]: {broadcastedOn}\n' \
                f'[B]{self._t.getString(AVAILABLETO)}[/B]: {availableTo} '
@@ -136,26 +141,27 @@ class ArdMediathekClient:
 
         if teasers is not None:
             for teaser in teasers:
+                print(teaser['title'])
                 if self._isValidTeaser(teaser):
                     {
                         False: self.addItemPage,
                         True: self.addClip
                     }[self._skip_itemPage](teaser)
 
-            if pagination is not None:
-                pageNumber = int(pagination['pageNumber'])
-                pageSize = int(pagination['pageSize'])
-                totalElements = int(pagination['totalElements'])
+        if pagination is not None:
+            pageNumber = int(pagination['pageNumber'])
+            pageSize = int(pagination['pageSize'])
+            totalElements = int(pagination['totalElements'])
 
-                if totalElements > ((pageNumber + 1) * pageSize):
-                    strPageNumber = str(pageNumber + 2)
-                    tag = {
-                        'pageNumber': pageNumber + 1,
-                        'pageSize': self._PAGESIZE,
-                        'posterWidth': self._POSTERWIDTH
-                    }
-                    self._guiManager.addDirectory(title=f'Page {strPageNumber}',
-                                                  args=self.buildArgs('home', self._BASEURL, json.dumps(tag)))
+            if totalElements > ((pageNumber + 1) * pageSize):
+                strPageNumber = str(pageNumber + 2)
+                tag = {
+                    'pageNumber': pageNumber + 1,
+                    'pageSize': self._PAGESIZE,
+                    'posterWidth': self._POSTERWIDTH
+                }
+                self._guiManager.addDirectory(title=f'Page {strPageNumber}',
+                                              args=self.buildArgs('home', self._BASEURL, json.dumps(tag)))
 
     @staticmethod
     def get_query_args(s_args):

@@ -19,11 +19,8 @@ from libs.ardmediathek_client import ArdMediathekClient
 
 if __name__ == '__main__':
     addon_id = 'plugin.video.inasnacht'
-    baseurl = 'https://api.ardmediathek.de/page-gateway/widgets/daserste/asset' \
-              '/Y3JpZDovL2Rhc2Vyc3RlLm5kci5kZS8xNDA5?pageNumber={pageNumber}&pageSize={' \
-              'pageSize}&embedded=true&seasoned=false&seasonNumber=&withAudiodescription=false' \
-              '&withOriginalWithSubtitle=false&withOriginalversion=false'
+    mediathek_id = 'Y3JpZDovL2Rhc2Vyc3RlLm5kci5kZS8xNDA5'
 
-    app = ArdMediathekClient(addon_id, baseurl)
+    app = ArdMediathekClient(addon_id, mediathek_id)
     app.DoSome()
 

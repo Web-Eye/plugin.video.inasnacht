@@ -32,9 +32,9 @@ class Addon(xbmcaddon.Addon):
         else:
             return {
                 'quality': '3',
-                'suppress_signLanguage': 'true',
-                'suppress_duration': '3',
-                'page_itemCount': '3',
+                'suppress_MusicClips': 'true',
+                'suppress_duration': '2',
+                'page_itemCount': '5',
                 'skip_itemPage': 'true'
             }[name]
 

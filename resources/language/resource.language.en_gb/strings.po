@@ -49,7 +49,7 @@ msgid "Preferred Quality"
 msgstr ""
 
 msgctxt "#30008"
-msgid "Suppress Sign-Language Shows"
+msgid "Suppress Music Clips"
 msgstr ""
 
 msgctxt "#30009"

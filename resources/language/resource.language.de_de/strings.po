@@ -49,8 +49,8 @@ msgid "Preferred Quality"
 msgstr "Bevorzugte Qualität"
 
 msgctxt "#30008"
-msgid "Suppress Sign-Language Shows"
-msgstr "Unterdrücke Gebärdensprachen Sendungen"
+msgid "Suppress Music Clips"
+msgstr "Unterdrücke Musik Clips"
 
 msgctxt "#30009"
 msgid "Suppress Shows short than"

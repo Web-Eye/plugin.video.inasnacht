@@ -35,4 +35,11 @@ class utils:
 
     @staticmethod
     def getDateTime(strDateTime, strFormat):
-        return datetime(*(time.strptime(strDateTime, strFormat)[0:6]))
+        if strDateTime is not None:
+            return datetime(*(time.strptime(strDateTime, strFormat)[0:6]))
+
+    @staticmethod
+    def formatDateTime(dateTime, strFormat):
+        if dateTime is not None:
+            return dateTime.strftime(strFormat)
+
