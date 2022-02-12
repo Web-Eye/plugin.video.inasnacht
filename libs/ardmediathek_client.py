@@ -141,7 +141,6 @@ class ArdMediathekClient:
 
         if teasers is not None:
             for teaser in teasers:
-                print(teaser['title'])
                 if self._isValidTeaser(teaser):
                     {
                         False: self.addItemPage,
