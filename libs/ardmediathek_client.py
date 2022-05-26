@@ -56,25 +56,26 @@ class ArdMediathekClient:
 
         # -- Settings -----------------------------------------------
         addon = Addon(self._ADDON_ID)
+        self._addon_name = addon.getAddonInfo('name')
+        self._addon_icon = addon.getAddonInfo('icon')
         self._t = Translations(addon)
         self._quality_id = int(addon.getSetting('quality'))
-        self._PAGESIZE = {
-            '0': 5,
-            '1': 10,
-            '2': 15,
-            '3': 20,
-            '4': 25,
-            '5': 30
-        }[addon.getSetting('page_itemCount')]
+        self._PAGESIZE = int(addon.getSetting('page_itemCount'))
         self._skip_itemPage = (addon.getSetting('skip_itemPage') == 'true')
         self._suppress_MusicClips = (addon.getSetting('suppress_MusicClips') == 'true')
-        self._suppress_durationSeconds = {
-            '0': 0,
-            '1': 30,
-            '2': 60,
-            '3': 180,
-            '4': 300
-        }[addon.getSetting('suppress_duration')]
+        self._suppress_durationSeconds = int(addon.getSetting('suppress_duration'))
+
+        self._db_enabled = (addon.getSetting('database_enabled') == 'true')
+        self._db_config = None
+        if self._db_enabled:
+            self._db_config = {
+                'host': addon.getSetting('db_host'),
+                'port': int(addon.getSetting('db_port')),
+                'user': addon.getSetting('db_username'),
+                'password': addon.getSetting('db_password'),
+                'database': 'KodiWebGrabber_Test'
+            }
+            self._skip_itemPage = True
 
     def setItemView(self, url, tag=None):
 

@@ -16,27 +16,27 @@ msgstr ""
 "Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgctxt "#30100"
+msgctxt "#30300"
 msgid "Duration"
 msgstr "Dauer"
 
-msgctxt "#30101"
+msgctxt "#30301"
 msgid "Broadcasted on"
 msgstr "Sendetermin"
 
-msgctxt "#30102"
+msgctxt "#30302"
 msgid "Available to"
 msgstr "Verfügbar bis"
 
-msgctxt "#30103"
+msgctxt "#30303"
 msgid "hours"
 msgstr "Stunden"
 
-msgctxt "#30104"
+msgctxt "#30304"
 msgid "minutes"
 msgstr "Minuten"
 
-msgctxt "#30105"
+msgctxt "#30305"
 msgid "seconds"
 msgstr "Sekunden"
 

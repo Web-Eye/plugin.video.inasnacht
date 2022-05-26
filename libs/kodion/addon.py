@@ -16,7 +16,6 @@
 #
 
 import os
-
 import xbmcaddon
 
 
@@ -26,15 +25,28 @@ class Addon(xbmcaddon.Addon):
         xbmcaddon.Addon.__init__(self, id)
         self._debug = os.getenv('kodi_debug') is not None
 
+    def getAddonInfo(self, name):
+        if not self._debug:
+            return xbmcaddon.Addon.getAddonInfo(self, name)
+        else:
+            if name == 'name':
+                return 'Ina\'s Nacht'
+            elif name == 'icon':
+                return None
+
     def getSetting(self, name):
         if not self._debug:
             return xbmcaddon.Addon.getSetting(self, name)
         else:
             return {
-                'quality': '3',
+                'quality': '5',
                 'suppress_MusicClips': 'true',
                 'suppress_duration': '2',
                 'page_itemCount': '5',
-                'skip_itemPage': 'true'
+                'skip_itemPage': 'true',
+                'database_enabled': 'true',
+                'db_host': 'fsnas01',
+                'db_port': '3306',
+                'db_username': 'kodi',
+                'db_password': 'kodi'
             }[name]
-

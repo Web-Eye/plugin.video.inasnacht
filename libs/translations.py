@@ -31,10 +31,10 @@ class Translations:
     def getString(self, name):
 
         return {
-            DURATION:          self._language(30100),
-            BROADCASTEDON:     self._language(30101),
-            AVAILABLETO:       self._language(30102),
-            HOURS:             self._language(30103),
-            MINUTES:           self._language(30104),
-            SECONDS:           self._language(30105)
+            DURATION:          self._language(30300),
+            BROADCASTEDON:     self._language(30301),
+            AVAILABLETO:       self._language(30302),
+            HOURS:             self._language(30303),
+            MINUTES:           self._language(30304),
+            SECONDS:           self._language(30305)
         }[name]

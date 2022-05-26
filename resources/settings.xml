@@ -21,12 +21,12 @@
                     <default>20</default>
                     <constraints>
                         <options>
-                            <option label="30029">5</option>
-                            <option label="30030">10</option>
-                            <option label="30031">15</option>
-                            <option label="30032">20</option>
-                            <option label="30033">25</option>
-                            <option label="30034">30</option>
+                            <option label="30200">5</option>
+                            <option label="30201">10</option>
+                            <option label="30202">15</option>
+                            <option label="30203">20</option>
+                            <option label="30204">25</option>
+                            <option label="30205">30</option>
                         </options>
                     </constraints>
                     <control type="spinner" format="integer"/>
