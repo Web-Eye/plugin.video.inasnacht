@@ -17,8 +17,10 @@
 
 import xbmcplugin
 import xbmcgui
+import xbmc
 
 import urllib.parse
+
 
 def getScreenHeight():
     return xbmcgui.getScreenHeight()
@@ -100,3 +102,7 @@ class GuiManager:
 
     def endOfDirectory(self):
         xbmcplugin.endOfDirectory(self._argv)
+
+    @staticmethod
+    def setToastNotification(header, message, time=5000, image=None):
+        xbmc.executebuiltin('Notification(%s, %s, %d, %s)' % (header, message, time, image))

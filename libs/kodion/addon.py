@@ -42,7 +42,7 @@ class Addon(xbmcaddon.Addon):
                 'quality': '5',
                 'suppress_MusicClips': 'true',
                 'suppress_duration': '2',
-                'page_itemCount': '5',
+                'page_itemCount': '20',
                 'skip_itemPage': 'true',
                 'database_enabled': 'true',
                 'db_host': 'fsnas01',

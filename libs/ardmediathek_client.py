@@ -18,7 +18,9 @@ import json
 import sys
 import urllib
 import urllib.parse
+import mysql.connector
 
+from libs.database.database_api import DBAPI
 from libs.kodion.addon import Addon
 from libs.ardmediathek_api import ARDMediathekAPI
 from libs.kodion.gui_manager import *
@@ -139,17 +141,46 @@ class ArdMediathekClient:
                                       infoLabels=infoLabels, args=self.buildArgs('item', teaser['url']))
 
     def addClip(self, teaser):
-        url = teaser['url']
-        self.setItemView(url, None)
+        if not self._db_enabled:
+            url = teaser['url']
+            self.setItemView(url, None)
+
+        else:
+            title = teaser['title']
+
+            broadcastedOn = utils.convertDateTime(teaser['broadcastedOn'], '%Y-%m-%dT%H:%M:%SZ', '%Y-%m-%d')
+
+            infoLabels = {
+                'Title': title,
+                'Plot': teaser['plot'],
+                'Date': broadcastedOn,
+                'Aired': broadcastedOn,
+                'Duration': teaser['duration']
+            }
+
+            self._guiManager.addItem(title=title, url=teaser['url'], poster=teaser['poster'], _type='video',
+                                     infoLabels=infoLabels)
 
     def setHomeView(self, url, tag=None):
-        API = ARDMediathekAPI(url, tag)
-        pagination = API.getPagination()
+
+        if not self._db_enabled:
+            API = ARDMediathekAPI(url, tag)
+        else:
+            tag['quality'] = self._quality_id
+            tag['suppress_MusicClips'] = self._suppress_MusicClips
+            tag['suppress_durationSeconds'] = self._suppress_durationSeconds
+            try:
+                API = DBAPI(self._db_config, tag)
+            except mysql.connector.Error as e:
+                self._guiManager.setToastNotification(self._addon_name, e.msg, image=self._addon_icon)
+                return
+
         teasers = API.getTeaser()
+        pagination = API.getPagination()
 
         if teasers is not None:
             for teaser in teasers:
-                if self._isValidTeaser(teaser):
+                if self._db_enabled or self._isValidTeaser(teaser):
                     {
                         False: self.addItemPage,
                         True: self.addClip
