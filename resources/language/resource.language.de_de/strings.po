@@ -106,7 +106,11 @@ msgstr "Username"
 
 msgctxt "#30022"
 msgid "Password"
-msgstr "Password"
+msgstr "Passwort"
+
+msgctxt "#30023"
+msgid "Database"
+msgstr "Datenbank"
 
 msgctxt "#30100"
 msgid "270p"

@@ -108,6 +108,10 @@ msgctxt "#30022"
 msgid "Password"
 msgstr ""
 
+msgctxt "#30023"
+msgid "Database"
+msgstr ""
+
 msgctxt "#30100"
 msgid "270p"
 msgstr ""
